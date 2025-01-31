@@ -1,0 +1,106 @@
+version: '3'
+services:
+  opensearch-node:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch-node
+    environment:
+      - cluster.name=opensearch-cluster # Name the cluster
+      - node.name=opensearch-node # Name the node that will run in this container
+      - discovery.seed_hosts=opensearch-node # Nodes to look for when discovering the cluster
+      - cluster.initial_cluster_manager_nodes=opensearch-node # Nodes eligibile to serve as cluster manager
+      - bootstrap.memory_lock=true # Disable JVM heap memory swapping
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # Set min and max JVM heap sizes to at least 50% of system RAM
+      - "DISABLE_INSTALL_DEMO_CONFIG=true" # Prevents execution of bundled demo script which installs demo certificates and security configurations to OpenSearch
+      - "DISABLE_SECURITY_PLUGIN=true" # Disables security plugin
+    ulimits:
+      memlock:
+        soft: -1 # Set memlock to unlimited (no soft or hard limit)
+        hard: -1
+      nofile:
+        soft: 65536 # Maximum number of open files for the opensearch user - set to at least 65536
+        hard: 65536
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data # Creates volume called opensearch-data1 and mounts it to the container
+    ports:
+      - 9200:9200 # REST API
+      - 9600:9600 # Performance Analyzer
+    networks:
+      - opensearch-net # All of the containers will join the same Docker bridge network
+
+  dev-env:
+    image: abbyhu/opensearch-dashboards-dev:latest
+    container_name: dev-env
+    ports:
+      - 5601:5601
+      - 5603:5603
+    stdin_open: true 
+    tty: true
+    expose: 
+      - "5601"
+      - "5603"
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch-node:9200"]'
+      - 'SERVER_HOST="0.0.0.0"'
+      - 'REPO_URL=${REPO_URL}'
+    volumes:
+      - osd-dev:/home/osd-dev
+    networks:
+      - opensearch-net
+    entrypoint:
+      - /bin/bash
+
+  panacea-server:
+    image: franebbia/panacea-server:latest
+    container_name: panacea-server
+    networks:
+      - opensearch-net
+    stdin_open: true
+    tty: true
+    ports:
+     - "5002:5002"
+  
+  database:
+    image: postgres:15
+    container_name: database
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: flaskdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - opensearch-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  database-server:
+    image: franebbia/database-server:latest
+    container_name: database-server
+    networks:
+      - opensearch-net
+    stdin_open: true
+    tty: true
+    ports:
+      - "5003:5003"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/flaskdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=flaskdb
+    depends_on:
+      database:
+        condition: service_healthy
+
+volumes:
+  opensearch-data:
+  osd-dev:
+  pgdata:
+  
+networks:
+  opensearch-net:
