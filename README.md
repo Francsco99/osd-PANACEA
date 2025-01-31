@@ -57,13 +57,3 @@ yarn start:docker
 ### 6. Other
 
 For any doubt you can check the [OpenSearch Dashboards Docker Development Setup Manual](https://github.com/opensearch-project/OpenSearch-Dashboards/blob/main/docs/docker-dev/docker-dev-setup-manual.md).
-
-## Contributing
-
-Contributions are welcome! To contribute:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/your-feature`).
-3. Make your changes and commit them (`git commit -m 'Add new feature'`).
-4. Push to your branch (`git push origin feature/your-feature`).
-5. Open a Pull Request.
