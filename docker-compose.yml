@@ -44,10 +44,12 @@ services:
       - 'REPO_URL=${REPO_URL}'
     volumes:
       - osd-dev:/home/osd-dev
+      - ./entrypoint.sh:/entrypoint.sh
     networks:
       - opensearch-net
     entrypoint:
       - /bin/bash
+      - /entrypoint.sh
 
   panacea-server:
     image: franebbia/panacea-server:latest
