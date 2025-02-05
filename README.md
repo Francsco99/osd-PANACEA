@@ -56,7 +56,8 @@ docker compose up -d --build
 
 - Under the `Docker` right-click `abbyhu/opensearch-dashboards-dev:latest`, and select Attach Visual Studio Code.
 	- This will ssh into the container and you will be able to view and edit the files using VS Code as the code editor.
-    **__NOTE__** If you do not wish to use VS Code as the code editor, the alternative way of ssh into the container is by using the command:
+
+    **_NOTE_** If you do not wish to use VS Code as the code editor, the alternative way of ssh into the container is by using the command:
 ```
 docker exec -it dev-env /bin/bash
 ```
