@@ -4,10 +4,27 @@
 1. The developer environment for Opensearch Dashboards.
 2. A Flask application exposing APIs to interact with PANACEA.
 3. A Flask application exposing APIs for database operations to store and manage data for the plugin.
+4. The PostgreSQL database
 
-## Setup Instructions
+## Table of Contents
 
-### 1. Clone the Repository
+1. [Setup for Linux and MacOS](#setup-for-linux)
+   - [Clone the Repository](#clone-the-repository)
+   - [Set the Environment Variable](#set-the-environment-variable)
+   - [Start the Containers](#start-the-containers)
+   - [Install the `adt-viewer` Plugin](#install-the-adt-viewer-plugin)
+   - [Start OpenSearch Dashboards](#start-opensearch-dashboards)
+   - [Other Resources](#other-resources)
+2. [Setup for Windows](#setup-for-windows)
+   - [Modify the `docker-compose.yml` file](#modify-the-docker-composeyml-file)
+   - [Modify the `entrypoint.sh` file](#modify-the-entrypointsh-file)
+   - [Installation Process](#installation-process)
+
+---
+
+## Setup for Linux
+
+### Clone the Repository
 
 First, clone this repository and navigate to its directory:
 
@@ -15,14 +32,27 @@ First, clone this repository and navigate to its directory:
 git clone https://github.com/Francsco99/osd-PANACEA.git
 ```
 
-### 2. Start the Containers
+### Set the Environment Variable
+
+Set the environment variable for the fork repository URL by running the following command:
+```bash
+export REPO_URL=[insert your fork repo URL here]
+```
+If a forked repository has not been created:
+	1. Go to the Opensearch Dashboards Github page
+	2. Create a new fork
+	3. Copy the HTTPS link of the forked repository URL and use it in the above command
+
+**_NOTE_** This command needs to be re-run every time you restart the Docker compose file in a new terminal.
+
+### Start the Containers
 
 Run the following command:
 ```bash
 docker compose up -d --build
 ```
 
-### 4. Installing the adt-viewer plugin
+### Installing the adt-viewer plugin
 
 - Under the `Docker` tab in VS Code, verify that there are five containers running: opensearchproject/opensearch:latest and abbyhu/opensearch-dashboards-dev:latest.
 - Right-click `abbyhu/opensearch-dashboards-dev:latest`, and select Attach Visual Studio Code.
@@ -38,7 +68,7 @@ cd plugins
 git clone https://github.com/Francsco99/adt_viewer
 ```
 
-### 5. Starting OpenSearch Dashboards (instructions from Opensearch Dashboards)
+### Starting OpenSearch Dashboards (instructions from Opensearch Dashboards)
 
 - In the terminal, start the OpenSearch Dashboards application by typing:
 ```
@@ -54,6 +84,22 @@ yarn start:docker
 
 - Then paste the link into a browser and view dashboard running in browser, but change ‘0.0.0.0’ to ‘localhost’. So here the link should be `http://localhost:5603/dog`.
 
-### 6. Other
+### Other Resources
 
 For any doubt you can check the [OpenSearch Dashboards Docker Development Setup Manual](https://github.com/opensearch-project/OpenSearch-Dashboards/blob/main/docs/docker-dev/docker-dev-setup-manual.md).
+
+## Setup for Windows
+
+### Modify the docker-compose.yml file
+
+	- Open `docker-compose.yml`
+	- Replace the variable `${REPO_URL}` with the forked reposiotory URL
+
+### Modify the entrypoint.sh file
+
+	- Open `entrypoint.sh`
+	- Change the **End of line** format to make it Windows-compatible
+
+### Installation Process
+
+Once the above modifications are done, follow the same installation steps at the Linux setup
