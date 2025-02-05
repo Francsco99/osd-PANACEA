@@ -51,16 +51,6 @@ services:
       - /bin/bash
       - /entrypoint.sh
 
-  panacea-server:
-    image: franebbia/panacea-server:latest
-    container_name: panacea-server
-    networks:
-      - opensearch-net
-    stdin_open: true
-    tty: true
-    ports:
-     - "5002:5002"
-  
   database:
     image: postgres:15
     container_name: database
@@ -81,14 +71,15 @@ services:
       timeout: 3s
       retries: 5
 
-  database-server:
-    image: franebbia/database-server:latest
-    container_name: database-server
+  panacea-app:
+    image: franebbia/panacea-app:latest
+    container_name: panacea-app
     networks:
       - opensearch-net
     stdin_open: true
     tty: true
     ports:
+      - "5002:5002"
       - "5003:5003"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@database:5432/flaskdb
