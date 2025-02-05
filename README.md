@@ -54,10 +54,9 @@ docker compose up -d --build
 
 ### Installing the adt-viewer plugin
 
-- Under the `Docker` tab in VS Code, verify that there are five containers running: opensearchproject/opensearch:latest and abbyhu/opensearch-dashboards-dev:latest.
-- Right-click `abbyhu/opensearch-dashboards-dev:latest`, and select Attach Visual Studio Code.
+- Under the `Docker` right-click `abbyhu/opensearch-dashboards-dev:latest`, and select Attach Visual Studio Code.
 	- This will ssh into the container and you will be able to view and edit the files using VS Code as the code editor.
-    	- If you do not wish to use VS Code as the code editor, the alternative way of ssh into the container is by using the command:
+    **__NOTE__** If you do not wish to use VS Code as the code editor, the alternative way of ssh into the container is by using the command:
 ```
 docker exec -it dev-env /bin/bash
 ```
@@ -92,13 +91,13 @@ For any doubt you can check the [OpenSearch Dashboards Docker Development Setup 
 
 ### Modify the docker-compose.yml file
 
-	- Open `docker-compose.yml`
-	- Replace the variable `${REPO_URL}` with the forked reposiotory URL
+- Open `docker-compose.yml`
+- Replace the variable `${REPO_URL}` with the forked reposiotory URL
 
 ### Modify the entrypoint.sh file
 
-	- Open `entrypoint.sh`
-	- Change the **End of line** format to make it Windows-compatible
+- Open `entrypoint.sh`
+- Change the **End of line** format to make it Windows-compatible
 
 ### Installation Process
 
